@@ -824,6 +824,133 @@
             background: rgba(255, 255, 255, 0.2);
             transform: scale(1.1);
         }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        }
+
+        .glow-border {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-glow {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .text-glow-subtle {
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        .neon-border {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .neon-border:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(31, 38, 135, 0.2);
+        }
+
+        .glass-reply {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-neon-danger {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            border: none;
+            color: white;
+            box-shadow: 0 2px 10px rgba(255, 107, 107, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-neon-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.5);
+        }
+
+        .btn-neon-primary {
+            background: linear-gradient(45deg, #4e54c8, #8f94fb);
+            border: none;
+            color: white;
+            box-shadow: 0 2px 10px rgba(78, 84, 200, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-neon-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(78, 84, 200, 0.5);
+        }
+
+        .neon-input input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .neon-input input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .comment-content, .reply-content {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        .gallery-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .photo-item {
+            flex: 1 1 calc(20% - 10px);
+            max-width: calc(20% - 10px);
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photo-item:hover {
+            transform: scale(1.05);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .photo-item p {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px;
+            margin: 0;
+            font-size: 0.9rem;
+            text-align: center;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -847,6 +974,13 @@
                     <span>Manajemen Admin</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('kategori.index') }}" class="sidebar-link {{ Request::is('kategori*') ? 'active' : '' }}">
+                    <i class="bi bi-grid"></i>
+                    <span>Kategori</span>
+                </a>
+            </li>
+
         </ul>
         <div class="bottom-buttons">
             <div class="button-container">
@@ -870,6 +1004,20 @@
 
     <div class="main-content">
         <div class="container-fluid">
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             <h2 class="page-title">@yield('title', 'Dashboard')</h2>
 
             @if(Request::is('dashboard'))
@@ -1076,45 +1224,20 @@
         </div>
     </div>
 
-    <!-- Tambahkan setelah bagian album -->
-    @if(isset($comments) && $comments->count() > 0)
-        <div class="card mt-4">
-            <div class="card-header">
-                <h5 class="mb-0" style="color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);">Komentar Terbaru</h5>
-            </div>
-            <div class="card-body">
-                @foreach($comments as $comment)
-                <div class="comment-item mb-3">
-                    <div class="d-flex justify-content-between">
-                        <strong>{{ $comment->name }}</strong>
-                        <small>{{ $comment->created_at->diffForHumans() }}</small>
-                    </div>
-                    <p>{{ $comment->content }}</p>
-                    
-                    <!-- Form Reply -->
-                    <form action="{{ route('comments.reply', $comment) }}" method="POST" class="mt-2">
-                        @csrf
-                        <div class="input-group">
-                            <input type="text" name="content" class="form-control" placeholder="Balas komentar...">
-                            <button type="submit" class="btn btn-primary">Balas</button>
-                        </div>
-                    </form>
 
-                    <!-- Replies -->
-                    @foreach($comment->replies as $reply)
-                    <div class="reply ms-4 mt-2">
-                        <div class="d-flex justify-content-between">
-                            <strong>Admin</strong>
-                            <small>{{ $reply->created_at->diffForHumans() }}</small>
-                        </div>
-                        <p>{{ $reply->content }}</p>
-                    </div>
-                    @endforeach
+    <!-- Modal untuk preview foto -->
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                @endforeach
+                <div class="modal-body p-0 text-center">
+                    <img src="" id="modalImage" class="img-fluid rounded">
+                </div>
             </div>
         </div>
-    @endif
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -1170,6 +1293,12 @@
                 });
             });
         });
+
+        function showPhotoModal(imagePath) {
+            document.getElementById('modalImage').src = imagePath;
+            var photoModal = new bootstrap.Modal(document.getElementById('photoModal'));
+            photoModal.show();
+        }
     </script>
 </body>
 

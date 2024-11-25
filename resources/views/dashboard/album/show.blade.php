@@ -3,15 +3,15 @@
 @section('title', $album['name'])
 
 @section('content')
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
+<div class="card glass-card">
+    <div class="card-header d-flex justify-content-between align-items-center glow-border">
         <div class="d-flex align-items-center">
-            <a href="{{ route('dashboard') }}" class="btn btn-outline-light btn-sm me-3">
+            <a href="{{ route('dashboard') }}" class="btn btn-outline-light btn-sm me-3 neon-button">
                 <i class="bi bi-arrow-left"></i> Kembali
             </a>
-            <h5 class="mb-0" style="color: #ffffff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);">
+            <h5 class="mb-0 text-glow">
                 <span id="albumName">{{ $album['name'] }}</span>
-                <button class="btn btn-link text-white p-0 ms-2" onclick="showEditNameForm()">
+                <button class="btn btn-link text-white p-0 ms-2 edit-btn" onclick="showEditNameForm()">
                     <i class="bi bi-pencil-square"></i>
                 </button>
             </h5>
@@ -20,7 +20,7 @@
                   method="POST" class="d-none ms-3">
                 @csrf
                 @method('PATCH')
-                <div class="input-group">
+                <div class="input-group neon-input">
                     <input type="text" class="form-control form-control-sm" 
                            name="name" value="{{ $album['name'] }}" required>
                     <button type="submit" class="btn btn-success btn-sm">
@@ -32,31 +32,31 @@
                 </div>
             </form>
         </div>
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#uploadPhotoModal">
+        <button class="btn btn-primary btn-sm neon-button" data-bs-toggle="modal" data-bs-target="#uploadPhotoModal">
             <i class="bi bi-plus-lg"></i> Tambah Foto
         </button>
     </div>
     <div class="card-body">
         @if(session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success alert-glow">
                 {{ session('success') }}
             </div>
         @endif
         @if(session('error'))
-            <div class="alert alert-danger">
+            <div class="alert alert-danger alert-glow">
                 {{ session('error') }}
             </div>
         @endif
 
         <div class="photo-grid">
             @foreach($album['photos'] as $photo)
-            <div class="photo-item">
+            <div class="photo-item neon-border">
                 <img src="{{ $photo['url'] }}" alt="Photo" class="album-photo">
-                <div class="photo-info">
+                <div class="photo-info glass-effect">
                     <span class="photo-name" id="photoName_{{ $photo['id'] }}">
                         {{ $photo['name'] }}
                     </span>
-                    <button class="btn btn-link btn-sm text-white p-0 ms-2" 
+                    <button class="btn btn-link btn-sm text-white p-0 ms-2 edit-btn" 
                             onclick="showEditPhotoName(`{{ $photo['id'] }}`, `{{ $photo['name'] }}`)">
                         <i class="bi bi-pencil-square"></i>
                     </button>
@@ -68,7 +68,7 @@
                         @csrf
                         @method('PATCH')
                         <input type="hidden" name="filename" value="{{ $photo['filename'] }}">
-                        <div class="input-group input-group-sm">
+                        <div class="input-group input-group-sm neon-input">
                             <input type="text" class="form-control form-control-sm" 
                                    name="name" value="{{ $photo['name'] }}" required>
                             <button type="submit" class="btn btn-success btn-sm">
@@ -81,9 +81,9 @@
                         </div>
                     </form>
                 </div>
-                <div class="photo-overlay">
+                <div class="photo-overlay glass-effect">
                     <div class="photo-actions">
-                        <button class="btn btn-light btn-sm me-2" onclick="previewImage(`{{ $photo['url'] }}`)">
+                        <button class="btn btn-light btn-sm me-2 action-btn" onclick="previewImage(`{{ $photo['url'] }}`)">
                             <i class="bi bi-eye"></i>
                         </button>
                         <form action="{{ route('album.deletePhoto', ['albumId' => $album['id'], 'photoId' => $photo['id']]) }}" 
@@ -92,7 +92,7 @@
                             @csrf
                             @method('DELETE')
                             <input type="hidden" name="filename" value="{{ $photo['filename'] }}">
-                            <button type="submit" class="btn btn-danger btn-sm">
+                            <button type="submit" class="btn btn-danger btn-sm action-btn">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </form>
@@ -107,29 +107,29 @@
 <!-- Modal Upload Foto -->
 <div class="modal fade" id="uploadPhotoModal" tabindex="-1">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content glass-card">
             <div class="modal-header">
-                <h5 class="modal-title">Upload Foto</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title text-glow">Upload Foto</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('album.upload', $album['id']) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="photos" class="form-label">Pilih Foto</label>
-                        <input type="file" class="form-control" id="photos" name="photos[]" accept="image/*" multiple required>
-                        <div class="form-text">Format yang didukung: JPG, JPEG, PNG, GIF. Maksimal 2MB per file.</div>
+                        <label for="photos" class="form-label text-glow-subtle">Pilih Foto</label>
+                        <input type="file" class="form-control neon-input" id="photos" name="photos[]" accept="image/*" multiple required>
+                        <div class="form-text text-glow-subtle">Format yang didukung: JPG, JPEG, PNG, GIF. Maksimal 2MB per file.</div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Preview</label>
-                        <div id="previewContainer" class="d-flex flex-wrap gap-2">
+                        <label class="form-label text-glow-subtle">Preview</label>
+                        <div id="previewContainer" class="d-flex flex-wrap gap-2 preview-container">
                             <!-- Preview images will be added here -->
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Upload</button>
+                    <button type="button" class="btn btn-secondary neon-button" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary neon-button">Upload</button>
                 </div>
             </form>
         </div>
@@ -144,13 +144,79 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-0 text-center">
-                <img src="" id="previewImage" class="img-fluid rounded">
+                <img src="" id="previewImage" class="img-fluid rounded preview-image">
             </div>
         </div>
     </div>
 </div>
 
 <style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+    }
+
+    .glow-border {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-glow {
+        color: #fff;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .text-glow-subtle {
+        color: rgba(255, 255, 255, 0.8);
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+
+    .neon-button {
+        position: relative;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .neon-button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+    }
+
+    .neon-button::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+        opacity: 0;
+        transition: 0.5s;
+    }
+
+    .neon-button:hover::after {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+
+    .neon-input input {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    .neon-input input:focus {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+
     .photo-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -163,6 +229,12 @@
         border-radius: 10px;
         overflow: hidden;
         background: rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .photo-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(31, 38, 135, 0.2);
     }
 
     .album-photo {
@@ -170,6 +242,17 @@
         height: auto;
         object-fit: contain;
         display: block;
+        transition: transform 0.3s ease;
+    }
+
+    .photo-item:hover .album-photo {
+        transform: scale(1.05);
+    }
+
+    .glass-effect {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .photo-overlay {
@@ -178,7 +261,6 @@
         left: 0;
         right: 0;
         bottom: 60px;
-        background: rgba(0, 0, 0, 0.5);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -195,61 +277,34 @@
         gap: 10px;
     }
 
-    .photo-actions button {
-        padding: 8px 12px;
+    .action-btn {
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
         transition: all 0.3s ease;
     }
 
-    .photo-actions button:hover {
+    .action-btn:hover {
         transform: scale(1.1);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
     }
 
-    .btn-outline-light {
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: #ffffff;
-        transition: all 0.3s ease;
+    .action-btn.btn-danger {
+        background: rgba(220, 53, 69, 0.9);
+        color: white;
     }
 
-    .btn-outline-light:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.5);
-        transform: translateX(-3px);
-    }
-
-    .btn-outline-light i {
-        margin-right: 5px;
-    }
-
-    .photo-actions form {
-        margin: 0;
-    }
-
-    .photo-actions .btn {
-        width: 35px;
-        height: 35px;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .photo-actions .btn-danger:hover {
-        animation: shake 0.5s;
-    }
-
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-2px); }
-        75% { transform: translateX(2px); }
+    .action-btn.btn-danger:hover {
+        background: #dc3545;
     }
 
     .photo-info {
-        padding: 10px;
-        background: rgba(0, 0, 0, 0.7);
+        padding: 15px;
         position: absolute;
         bottom: 0;
         left: 0;
@@ -257,47 +312,26 @@
         color: white;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        z-index: 2;
         min-height: 60px;
     }
 
-    .photo-name {
-        font-size: 0.9rem;
-        margin-right: 10px;
-        flex-grow: 1;
+    .preview-container {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        padding: 15px;
     }
 
-    .edit-photo-form {
-        flex-grow: 1;
-        position: relative;
-        z-index: 3;
+    .preview-image {
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
     }
 
-    .edit-photo-form .input-group {
-        background: rgba(0, 0, 0, 0.8);
-        padding: 5px;
-        border-radius: 4px;
+    .alert-glow {
+        animation: alertGlow 2s ease-in-out infinite;
     }
 
-    .edit-photo-form input {
-        background: rgba(255, 255, 255, 0.9);
-        border: none;
-        color: #333;
-    }
-
-    .photo-info button,
-    .edit-photo-form button {
-        position: relative;
-        z-index: 3;
-    }
-
-    #previewContainer {
-        max-height: 300px;
-        overflow-y: auto;
-        padding: 10px;
-        background: rgba(0, 0, 0, 0.05);
-        border-radius: 5px;
+    @keyframes alertGlow {
+        0%, 100% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); }
+        50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
     }
 </style>
 

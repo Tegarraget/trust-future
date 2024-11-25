@@ -110,6 +110,9 @@
 
                 <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
+            <div class="mt-3">
+                <a href="{{ route('password.request') }}" class="text-decoration-none">Lupa Password?</a>
+            </div>
         </div>
     </div>
 

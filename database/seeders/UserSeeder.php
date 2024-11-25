@@ -10,14 +10,18 @@ class UserSeeder extends Seeder
 {
     public function run()
     {
-        // Hapus data user yang ada (optional)
-        User::truncate();
+        User::truncate(); // Hapus semua data user sebelumnya
 
-        // Buat user admin baru
         User::create([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('password123'),
+        ]);
+
+        User::create([
+            'name' => 'Raget',
+            'email' => 'raget@gmail.com',
+            'password' => Hash::make('12345678'),
         ]);
     }
 } 
